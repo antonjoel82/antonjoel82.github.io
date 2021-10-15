@@ -8,6 +8,7 @@
     "email": "j.anton.dev@gmail.com"
   },
   "scripts": {
+    "deploy": "./deploy.sh",
     "dev": "vite",
     "build": "tsc && vite build",
     "serve": "vite preview",

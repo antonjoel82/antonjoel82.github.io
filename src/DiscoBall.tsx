@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect } from "react";
 import * as THREE from "three";
 import { useFrame, Vector3 } from "@react-three/fiber";
 import { mean } from "lodash";

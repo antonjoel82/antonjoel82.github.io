@@ -29,6 +29,12 @@ function App() {
     }
   }, [play, sound.current])
 
+  const handleSongEnded = () => {
+    // ensure it's stopped
+    sound.current?.stop();
+    setPlay(false);
+  }
+
   return (
     <div className="App">
       <Canvas>
@@ -36,7 +42,7 @@ function App() {
         {/* <directionalLight position={[-8, -15, 3]} intensity={5} color={new THREE.Color("#e4a215")} />
         <directionalLight position={[8, -15, 3]} intensity={5} color={new THREE.Color("#f11616")} /> */}
         <Suspense fallback={null}>
-          <MyPositionalAudio url="/ColoursAndLights.mp3" distance={10} loop={false} ref={sound} autoplay={false} />
+          <MyPositionalAudio url="/ColoursAndLights.mp3" distance={10} loop={false} ref={sound} autoplay={false} onEnded={handleSongEnded} />
           <DiscoBall
             position={[0, 0, -10]}
             minRadius={0.015}

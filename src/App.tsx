@@ -1,24 +1,33 @@
 import "./App.css";
-import React, { useState, useRef, Suspense } from "react";
+import React, { useState, useRef, Suspense, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
-import { Environment, PositionalAudio } from "@react-three/drei";
-import { EffectComposer, Bloom, SMAA } from "@react-three/postprocessing";
+import { Environment } from "@react-three/drei";
 import { DiscoBall } from "./DiscoBall";
 import * as THREE from "three";
+import { MyPositionalAudio } from "./MyPositionalAudio";
 
 function App() {
-  const sound = useRef<any>();
-  const [play, setPlay] = useState<boolean>(true);
+  const sound = useRef<THREE.Audio>(null);
+  const [play, setPlay] = useState<boolean>(false);
 
   // Added a button to pause the music.
   function playMusic() {
-    if (play) {
-      sound.current?.pause();
-    } else {
-      sound.current?.play();
+    const _sound = sound.current;
+    if (_sound) {
+      if (play) {
+        _sound.pause();
+      } else {
+        _sound.play();
+      }
+      setPlay(!play);
     }
-    setPlay(!play);
   }
+
+  useEffect(() => {
+    if (sound.current?.isPlaying && !play) {
+      sound.current?.stop();
+    }
+  }, [play, sound.current])
 
   return (
     <div className="App">
@@ -27,20 +36,12 @@ function App() {
         {/* <directionalLight position={[-8, -15, 3]} intensity={5} color={new THREE.Color("#e4a215")} />
         <directionalLight position={[8, -15, 3]} intensity={5} color={new THREE.Color("#f11616")} /> */}
         <Suspense fallback={null}>
-          <PositionalAudio url="/ColoursAndLights.mp3" distance={10} loop ref={sound} />
+          <MyPositionalAudio url="/ColoursAndLights.mp3" distance={10} loop={false} ref={sound} autoplay={false} />
           <DiscoBall
             position={[0, 0, -10]}
             minRadius={0.015}
             sound={sound}
           />
-          {/* <EffectComposer multisampling={0}>
-            <Bloom
-              intensity={0.5}
-              luminanceThreshold={0}
-              luminanceSmoothing={0.8}
-            />
-            <SMAA />
-          </EffectComposer> */}
           <Environment preset="night" background />
         </Suspense>
       </Canvas>

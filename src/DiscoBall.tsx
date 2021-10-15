@@ -8,7 +8,7 @@ import { DiscoBallMesh } from "./DiscoBallMesh";
 export interface DiscoBallProps {
   position: Vector3;
   minRadius: number;
-  sound: React.MutableRefObject<THREE.Audio>;
+  sound: React.MutableRefObject<THREE.Audio | null>;
   rotationPerFrame?: number;
 }
 

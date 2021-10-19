@@ -1,63 +1,40 @@
 import "./App.css";
 import React, { useState, useRef, Suspense, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
-import { Environment } from "@react-three/drei";
-import { DiscoBall } from "./DiscoBall";
+import { Environment, OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
+
 import { MyPositionalAudio } from "./MyPositionalAudio";
+import { AnimatorFn, VisualizerContext } from "./VisualizerContext";
+import { useVisualizerContextProvider } from "./useVisualizerContextProvider";
+import { DiscoBall } from "./DiscoBall";
+import { VisualizerCanvas, VisualizerContextProvider } from "./VisualizerContextProvider";
+import { Controls } from "./Controls";
+import { AudioMain } from "./AudioMain";
 
 function App() {
-  const sound = useRef<THREE.Audio>(null);
-  const [play, setPlay] = useState<boolean>(false);
-
-  // Added a button to pause the music.
-  function playMusic() {
-    const _sound = sound.current;
-    if (_sound) {
-      if (play) {
-        _sound.pause();
-      } else {
-        _sound.play();
-      }
-      setPlay(!play);
-    }
-  }
-
-  useEffect(() => {
-    if (sound.current?.isPlaying && !play) {
-      sound.current?.stop();
-    }
-  }, [play, sound.current])
-
-  const handleSongEnded = () => {
-    // ensure it's stopped
-    sound.current?.stop();
-    setPlay(false);
-  }
-
   return (
     <div className="App">
-      <Canvas>
-        <ambientLight intensity={1} />
-        {/* <directionalLight position={[-8, -15, 3]} intensity={5} color={new THREE.Color("#e4a215")} />
-        <directionalLight position={[8, -15, 3]} intensity={5} color={new THREE.Color("#f11616")} /> */}
-        <Suspense fallback={null}>
-          <MyPositionalAudio url="/ColoursAndLights.mp3" distance={10} loop={false} ref={sound} autoplay={false} onEnded={handleSongEnded} />
-          <DiscoBall
-            position={[0, 0, -10]}
-            minRadius={0.015}
-            sound={sound}
+      <VisualizerContextProvider>
+        <VisualizerCanvas>
+          <ambientLight intensity={0.2} />
+          <directionalLight
+            position={[-8, -15, 3]}
+            intensity={50}
+            color={new THREE.Color("#e4a215")}
           />
-          <Environment preset="night" background />
-        </Suspense>
-      </Canvas>
-      <button
-        aria-label="play"
-        className="toggleMusicBtn"
-        onClick={playMusic}
-      >
-        {!play ? "Play" : "Pause"}
-      </button>
+          <directionalLight
+            position={[8, -15, 3]}
+            intensity={50}
+            color={new THREE.Color("#f11616")}
+          />
+          <OrbitControls enablePan enableZoom enableRotate />
+          <Suspense fallback={null}>
+            <AudioMain />
+          </Suspense>
+        </VisualizerCanvas>
+        <Controls />
+      </VisualizerContextProvider>
     </div>
   );
 }

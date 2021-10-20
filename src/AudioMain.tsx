@@ -9,29 +9,8 @@ import { useVisualizer } from "./useVisualizer";
 
 const font = new FontLoader().parse(typefaceData)
 
-interface AudioMainProps {
-  // sound: MutableRefObject<THREE.PositionalAudio | null>;
-  // songUrl: string;
-  // handleSongEnded: () => void;
-}
-
-export const AudioMain: React.FC<AudioMainProps> = () => {
-  // const { analyzerRef, frequencyData } = useVisualizer({ sound });
+export const AudioMain: React.FC = () => {
   const { song, handleSongEnded, } = useVisualizer();
-  const minBass = useRef<number>(255);
-
-
-  // const [discoSize, setDiscoSize] = useState<number>(0.015);
-
-  // useEffect(() => {
-  //   console.log("Freq", frequencyData)
-  //   const avgBass = mean(frequencyData.slice(0, 8));
-  //   const bassScalar = Math.max(avgBass - minBass.current, 0);
-  //   console.log(bassScalar);
-  //   setDiscoSize(bassScalar);
-    
-  //   minBass.current = avgBass < minBass.current && avgBass > 0 ? avgBass : minBass.current;
-  // }, [frequencyData[0]]);
 
   return (
     <>
